@@ -22,7 +22,8 @@ docker-compose up --remove-orphans -d
 
 Sobald der Start-Befehl eingegeben wird, werden die entsprechenden Container-Images heruntergeladen und die Container erstellt, konfiguriert und gestartet. Dieser Vorgang kann einige Minuten in anspruch nehmen. Sobald die Container laufen, werden sie in Docker Desktop grün dargestellt werden.
 
-BILD DOCKER DESKTOP
+![grafik](https://github.com/schreinerbayern/rpa-llm4bits/assets/52781604/c798f5ef-bdc6-4477-80f0-ac4f039ca97c)
+
 
 ### Modelle herunterladen
 Als nächstes müssen Modelle in **ollama** heruntergeladen werden.
@@ -42,6 +43,10 @@ docker exec -it ollama sh -c "ollama pull nomic-embed-text"
 ### n8n Admin-Account einrichten
 Beim ersten Aufruf der Web-UI von **n8n** über  [http://localhost](http://localhost) wird man aufgefordert einen Account zu erstellen.
 
+![grafik](https://github.com/schreinerbayern/rpa-llm4bits/assets/52781604/5bfdc3bd-86e7-42a2-ac2e-4085580afa27)
+
+
+
 ### ollama mit n8n verknüpfen
 Nachdem ein Admin-Account eingerichtet wurde, erreicht man die **n8n** Konsole. In der Linken Menüleiste ist ein Schlüssel-Symbol zu finden. Hier kann die Verbindung zu **ollama** hinterlegt werden.
 1. Klich auf "Add credentials"
@@ -59,8 +64,7 @@ Nach dem Start des Clusters ist die Web-UI von **n8n** über folgende URL erreic
 **URL:** http://localhost
 
 ### Cluster starten
-Nachdem die Einrichtung des Clusters durchgeführt wurde, kann das Cluster über folgende Optionen wieder gestartet werden.
-#### Über Docker-Desktop
+Nachdem die Einrichtung des Clusters durchgeführt wurde, kann das Cluster jederzeit wieder gestartet werden.
 #### Über Kommandozeile
 ```sh
 # Cluster starten
@@ -68,9 +72,11 @@ docker-compose up --remove-orphans -d
 ```
 
 ### Cluster herunterfahren
-#### Über Docker-Desktop
 #### Über Kommandozeile
 ```sh
 # Cluster stoppen
 docker-compose down
 ```
+#### (Alt.) Über Docker-Desktop
+![grafik](https://github.com/schreinerbayern/rpa-llm4bits/assets/52781604/02035e41-abfc-4b5d-a8ba-e22fd12861a5)
+
