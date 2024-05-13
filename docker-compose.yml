@@ -1,0 +1,42 @@
+services:
+
+  n8n:
+    image: n8nio/n8n:next
+    container_name: n8n
+    restart: always
+    volumes:
+      - n8n:/home/node/.n8n
+    environment:
+      # https://docs.n8n.io/hosting/configuration/environment-variables/deployment/
+      - N8N_PROTOCOL=http
+      - N8N_PORT=80
+      - N8N_HOST=localhost
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_VERSION_NOTIFICATIONS_ENABLED=false
+      - N8N_HIRING_BANNER_ENABLED=false
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_DEFAULT_LOCALE=de
+      - GENERIC_TIMEZONE=Europe/Paris
+      - TZ=Europe/Berlin
+    ports:
+      - 80:80
+  
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      - key=value
+    
+volumes:
+  n8n:
+  ollama:
