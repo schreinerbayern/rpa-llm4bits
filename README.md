@@ -10,6 +10,13 @@ Verwendet folgende Softwarekomponenten:
 - (opt.) dedizierte GPU vorhanden
 
 ## Einrichtung
+### Repository herunterladen und extrahieren
+Zunächst muss dieses Repository ([rpa-llm4bits-main.zip](https://github.com/schreinerbayern/rpa-llm4bits/archive/refs/heads/main.zip)) heruntergeladen und entpackt werden.
+Anschließend wird innerhalb des Ordners ein Recktsklick druchgeführt und die Option `In Terminal öffnen` ausgewählt. Es öffnet sich eine Kommandozeile in der die folgenden Befehle ausgeführt werden können.
+
+> **Hinweis:**  
+> Es ist wichtig, dass das Terminal bzw. die Kommandozeile innerhalb des Ordners geöffnet wurden. Andernfalls können die Befehle nicht richtig durchgeführt werden.
+
 ### Cluster starten
 Die Services werden als Container-Cluster mit folgendem Befehl über die Kommandozeile gestartet:
 
