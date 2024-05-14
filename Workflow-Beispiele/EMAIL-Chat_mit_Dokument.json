@@ -1,0 +1,548 @@
+{
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "03a7543e37e53339da1899452dea61fb4f0f9af27fa97f1a33d8c9428f8ce265"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Microsoft Outlook Trigger').item.json.bodyPreview }}"
+      },
+      "id": "3cdbbfe6-a1a4-4cbd-bc3b-04f9c9fec996",
+      "name": "Question and Answer Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+      "typeVersion": 1.3,
+      "position": [
+        860,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "topK": 2
+      },
+      "id": "4c4e77bc-c199-41e3-aa56-6a0a45a49e5d",
+      "name": "Vector Store Retriever",
+      "type": "@n8n/n8n-nodes-langchain.retrieverVectorStore",
+      "typeVersion": 1,
+      "position": [
+        980,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:latest"
+      },
+      "id": "412a3d0b-8991-4344-acde-25f9336a42c2",
+      "name": "Embeddings Ollama",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        920,
+        1340
+      ],
+      "credentials": {
+        "ollamaApi": {
+          "id": "ULMCbZvhzRA7xWfd",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "options": {
+          "temperature": 0.6,
+          "numCtx": 4096,
+          "numPredict": -1
+        }
+      },
+      "id": "dc72de7e-7ef3-469b-8850-4b23a1dc5645",
+      "name": "Ollama Model",
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "typeVersion": 1,
+      "position": [
+        860,
+        1020
+      ],
+      "credentials": {
+        "ollamaApi": {
+          "id": "ULMCbZvhzRA7xWfd",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "readStatus": "unread"
+        },
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "id": "866dcd68-1bf3-4c91-98be-adf3668cb3ad",
+      "name": "Microsoft Outlook Trigger",
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        360,
+        160
+      ],
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "WmIflQCpDiWcEEmW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "a060fc07-fb2e-4ffd-ba55-52c9b28da4d8",
+              "leftValue": "={{ $json.hasAttachments }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d7cce429-080f-4eed-afba-eb2f75b68d7f",
+              "leftValue": "={{ $binary.attachment_0.fileExtension }}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "7f1678a4-c07c-490d-8ac3-83a0650a083d",
+      "name": "Anhang?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        580,
+        160
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c661a781-0e08-478e-909a-173631c99d37",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:latest"
+      },
+      "id": "7b51e7ea-8d78-450e-b3c3-c4dc3c760deb",
+      "name": "Embeddings Ollama1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        860,
+        320
+      ],
+      "credentials": {
+        "ollamaApi": {
+          "id": "ULMCbZvhzRA7xWfd",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "loader": "pdfLoader",
+        "binaryDataKey": "attachment_0",
+        "options": {}
+      },
+      "id": "77875156-e177-4617-94b2-28610d3b5f0d",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        980,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "8b81038a-693a-4138-9b88-8c15058c22a2",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook Trigger').item.json.id }}",
+          "mode": "id"
+        },
+        "replyToSenderOnly": true,
+        "message": "={{ $json.response.text }}\n\n**Powered by RoboBIT**",
+        "additionalFields": {},
+        "options": {
+          "saveAsDraft": false
+        }
+      },
+      "id": "cce00532-ce2e-43cc-a660-a0e8dad8e163",
+      "name": "Microsoft Outlook",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        840
+      ],
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "WmIflQCpDiWcEEmW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "id": "f95bdaeb-4f59-4a1b-b84e-bab788dcc1f6",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        1160,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "clearStore": true
+      },
+      "id": "7273e530-4b1a-4d0e-a956-0ffb40453865",
+      "name": "In-Memory Vector Store1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1,
+      "position": [
+        840,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook Trigger').item.json.id }}",
+          "mode": "id"
+        },
+        "updateFields": {
+          "isRead": true
+        }
+      },
+      "id": "efc3b135-2f43-4440-98c3-1b3dc81431ab",
+      "name": "Microsoft Outlook1",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        520
+      ],
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "WmIflQCpDiWcEEmW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "fd07e706-279a-48bf-9b23-961d01e78d44",
+      "name": "In-Memory Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1,
+      "position": [
+        920,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8413ff8d-6efe-4a07-acca-987048bb3527",
+              "leftValue": "={{ $('Microsoft Outlook Trigger').item.json.bodyPreview }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7f41e889-5edb-438d-8c6f-4b9ea0b905df",
+      "name": "Frage?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1700,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Anhang verarbeiten \nDokument splitten, in Embeddings umwandeln und in Vector-Store ablegen, um später von AI-Agenten genutzt werden zu können.",
+        "height": 830.5882352941189,
+        "width": 547.8109932497575
+      },
+      "id": "0f396666-4b7f-43ef-9b87-062e8f7b18c7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Frage / Benutzereingabe verarbeiten\nPassende Embeddings aus dem Vector-Store lesen und Antwort generieren.",
+        "height": 777.4541947926725,
+        "width": 826.3066538090654
+      },
+      "id": "3ab4fbf4-b4b1-4531-a6d7-57fd470c14b4",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        500,
+        720
+      ]
+    }
+  ],
+  "connections": {
+    "Question and Answer Chain": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Retriever": {
+      "ai_retriever": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_retriever",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "In-Memory Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Anhang?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anhang?": {
+      "main": [
+        [
+          {
+            "node": "In-Memory Vector Store1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "In-Memory Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "In-Memory Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "In-Memory Vector Store1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook1": {
+      "main": [
+        [
+          {
+            "node": "Frage?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "In-Memory Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Retriever",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Frage?": {
+      "main": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
